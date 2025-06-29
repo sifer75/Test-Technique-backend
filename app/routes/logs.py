@@ -47,8 +47,26 @@ def search_logs(
         must_clauses = []
 
         if q:
-            must_clauses.append({"match": {"message": q}})
-
+            must_clauses.append({
+                    "bool": {
+                        "should": [
+                            {
+                                "wildcard": {
+                                    "message.keyword": f"*{q.lower()}*"
+                                }
+                            },
+                            {
+                                "match": {
+                                    "message": {
+                                        "query": q,
+                                        "fuzziness": "AUTO"
+                                    }
+                                }
+                            }
+                        ],
+                        "minimum_should_match": 1
+                    }
+                })
         if level:
             must_clauses.append({"term": {"level.keyword": level}})
 
