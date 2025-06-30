@@ -1,3 +1,5 @@
 fastapi
 uvicorn[standard]
 wheel==0.45.1
+opensearch-py
+
